@@ -65,7 +65,7 @@ wham &
 wait
 
 # Path to python
-python_path=python
+python_path=python3
 
 # If you wish to rerun this script in the future please comment this line out.
 $python_path scripts/augment_train_noise.py --wham_dir $wham_dir

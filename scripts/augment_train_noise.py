@@ -43,6 +43,7 @@ def main(args):
 
 def augment_noise(sound_paths, speed):
     print(f"Change speed with factor {speed}")
+    print(sound_paths[:10])
     tqdm.contrib.concurrent.process_map(
         functools.partial(apply_fx, speed=speed),
         sound_paths,
@@ -54,6 +55,7 @@ def apply_fx(sound_path, speed):
     # Get the effect
     fx = (AudioEffectsChain().speed(speed))
     s, rate = sf.read(sound_path)
+
     # Get 1st channel
     s = s[:, 0]
     # Apply effect

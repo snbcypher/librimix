@@ -57,50 +57,54 @@ function wham() {
 	fi
 }
 
-LibriSpeech_dev_clean &
-LibriSpeech_test_clean &
-LibriSpeech_clean100 &
-# LibriSpeech_clean360 &
-wham &
+# LibriSpeech_dev_clean &
+# LibriSpeech_test_clean &
+# LibriSpeech_clean100 &
+# # LibriSpeech_clean360 &
+# wham &
 
 wait
 
 # Path to python
-python_path=python3
+python_path=python
 
 # If you wish to rerun this script in the future please comment this line out.
 # only augments wham training data
-$python_path scripts/augment_train_noise.py --wham_dir $wham_dir
+# echo augmenting training noise
+# $python_path scripts/augment_train_noise.py --wham_dir $wham_dir
 
-$python_path scripts/create_librispeech_metadata.py --librispeech_dir $librispeech_dir
-$python_path scripts/create_wham_metadata.py --wham_dir $wham_dir
+# echo creating librispeech metadata in $librispeech_dir
+# $python_path scripts/create_librispeech_metadata.py --librispeech_dir $librispeech_dir
+# echo creating wham metadata in $wham_dir
+# $python_path scripts/create_wham_metadata.py --wham_dir $wham_dir
+ 
+for n_src in 2; do
+  
+  metadata_dir=metadata_smaller/Libri$n_src"Mix"
 
-for n_src in 2 3 4 5; do
-  
-  metadata_dir=metadata_small/Libri$n_src"Mix"
-
-  librispeech_md_dir=$librispeech_dir"/metadata"
-  wham_md_dir=$wham_dir"/metadata"
-  
-  $python_path scripts/create_librimix_metadata.py \
-    --librispeech_dir $librispeech_dir \
-    --librispeech_md_dir $librispeech_md_dir \
-    --wham_dir $wham_dir \
-    --wham_md_dir $wham_md_dir \
-    --metadata_outdir $metadata_dir \
-    --n_src $n_src
-  
+  # librispeech_md_dir=$librispeech_dir"/metadata"
+  # wham_md_dir=$wham_dir"/metadata"
+ 
+  # echo creating Libri$n_src"Mix metadata in "$metadata_dir 
+  # $python_path scripts/create_librimix_metadata.py \
+  #   --librispeech_dir $librispeech_dir \
+  #   --librispeech_md_dir $librispeech_md_dir \
+  #   --wham_dir $wham_dir \
+  #   --wham_md_dir $wham_md_dir \
+  #   --metadata_outdir $metadata_dir \
+  #   --n_src $n_src
+   
   types="mix_clean mix_both"
   if [ $n_src -eq 2 ]; then
   	types="${types} mix_single"
   fi
-  
-  # $python_path scripts/create_librimix_from_metadata.py --librispeech_dir $librispeech_dir \
-  #   --wham_dir $wham_dir \
-  #   --metadata_dir $metadata_dir \
-  #   --librimix_outdir $librimix_outdir \
-  #   --n_src $n_src \
-  #   --freqs 8k \
-  #   --modes min \
-  #   --types $types
+  echo generating Libri${n_src}Mix from metadata file ${metadata_dir}  
+  $python_path scripts/create_librimix_from_metadata.py --librispeech_dir $librispeech_dir \
+    --wham_dir $wham_dir \
+    --metadata_dir $metadata_dir \
+    --librimix_outdir $librimix_outdir \
+    --n_src $n_src \
+    --freqs 8k \
+    --modes min \
+    --types $types
 done

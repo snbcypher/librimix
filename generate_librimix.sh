@@ -78,7 +78,7 @@ python_path=python
 # echo creating wham metadata in $wham_dir
 # $python_path scripts/create_wham_metadata.py --wham_dir $wham_dir
  
-for n_src in 2; do
+for n_src in 2 3 4 5; do
   
   metadata_dir=metadata_smaller/Libri$n_src"Mix"
 
